@@ -6,7 +6,7 @@ const TalkController = (Talk, Attendee) => {
 
   const getTalks = (req, res) => {
     Talk.findAll({
-      include: [{ model: Attendee }],
+      include: [Attendee],
     })
       .then((data) => {
         success({
@@ -25,18 +25,14 @@ const TalkController = (Talk, Attendee) => {
       });
   };
 
-  const updateRole = async (email, res) => {
-    const values = { role: 'speaker' };
+  const updateRole = async (email, res, role) => {
+    const values = { role };
     const selector = { where: { email } };
     try {
       const result = await Attendee.update(values, selector);
       return result[0];
     } catch (err) {
-      error({
-        err,
-        errCode: 400,
-        res,
-      });
+      console.log(err);
     }
   };
   const addTalk = async (req, res) => {
@@ -50,7 +46,7 @@ const TalkController = (Talk, Attendee) => {
           });
         } else {
           // update role
-          updateRole(req.body.email, res);
+          updateRole(req.body.email, res, 'speaker');
           Talk.findOrCreate({
             where: { speaker_id: req.body.email },
             defaults: {
@@ -86,16 +82,20 @@ const TalkController = (Talk, Attendee) => {
   };
 
   const deleteTalk = (req, res) => {
-    Talk.destroy({ where: { id: req.params.id } })
-      .then((data) => {
-        success({
-          successCode: 200,
-          data,
-          res,
-          msg: 'talk deleted',
-        });
-      })
-      .catch((err) => {
+    Talk.findOne({ where: { id: req.params.id } })
+      .then((result) => {
+        const { dataValues } = result;
+        updateRole(dataValues.speaker_id, res, 'attender');
+        Talk.destroy({ where: { id: req.params.id } })
+          .then((data) => {
+            success({
+              successCode: 200,
+              data,
+              res,
+              msg: 'Talk deleted',
+            });
+          });
+      }).catch((err) => {
         error({
           err,
           errCode: 400,

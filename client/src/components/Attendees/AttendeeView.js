@@ -21,7 +21,7 @@ const AttendeesTable = (props) => {
         {props.attendees.length !== 0 ? props.Table : "No registered attendees, why not be the first?"}
       </table>
 
-      <TalksContainer />
+      <TalksContainer refresh={props.refresh} />
     </div>
   );
 }

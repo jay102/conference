@@ -17,7 +17,7 @@ class SpeakContainer extends Component {
   fetchTalks = () => {
     axios.get('/api/talk')
       .then(res => {
-        console.log(res.data)
+        console.log(res.data.data)
         this.setState({ talks: res.data.data })
       })
       .catch(err => {
@@ -26,54 +26,50 @@ class SpeakContainer extends Component {
         }
       })
   }
-  makeRequest = (e) => {
+  deleteTalk = (e, id) => {
     e.preventDefault();
-    const data = {
-      email: this.state.email,
-      topic: this.state.topic,
-      time: this.state.startDate
+    console.log(id)
+    const del = window.confirm('Are you sure you want to delete talk?');
+    if (del) {
+      this.deleteFunc(id)
+    } else {
+      return;
     }
-
-    axios.post('/api/talk', data)
+  }
+  deleteFunc = (id) => {
+    axios.delete(`/api/talk/${id}`)
       .then(res => {
-        console.log(res.data)
-        this.setState({
-          email: "",
-          topic: "",
-          startDate: new Date(),
-          success: !this.state.success
-        })
+        alert(res.data.message)
+        this.fetchTalks();
+        this.props.refresh()
       })
       .catch(err => {
         if (err.response) {
-          const { error } = err.response.data;
-          this.setState({ error: !this.state.error, errorMsg: error })
-          if (error === "Email not a registered attendee") {
-            alert('Pls confirm your presence by registering')
-          }
+          console.log(err.response)
         }
       })
   }
   render() {
-    // const Table = this.state.talks.map(talks => {
-    //   return (
-    //     <tbody key={attendees.id}>
-    //       <tr>
-    //         <td>{attendees.id}</td>
-    //         <td>{attendees.first_name}</td>
-    //         <td>{attendees.last_name}</td>
-    //         <td>{attendees.role}</td>
-    //         <td>{attendees.email}</td>
-    //         <td>{attendees.phone}</td>
-    //         <td>{attendees.arrival_time}</td>
-    //       </tr>
-    //     </tbody>
-    //   );
-    // })
+    const Table = this.state.talks.map(talks => {
+      return (
+        <tbody key={talks.id}>
+          <tr>
+            <td>{talks.id}</td>
+            <td>{talks.attendee.first_name}</td>
+            <td>{talks.attendee.last_name}</td>
+            <td>{talks.attendee.role}</td>
+            <td>{talks.topic}</td>
+            <td>{talks.time}</td>
+            <td style={{ fontSize: "0.72rem" }}>
+              <button onClick={(e) => this.deleteTalk(e, talks.id)} className="btn btn-primary">Delete</button></td>
+          </tr>
+        </tbody>
+      );
+    })
     return (
       <AllTalks
         {...this.state}
-
+        Table={Table}
       />
     );
   }

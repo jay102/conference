@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('./index').sequelize;
 
+
 const Attendee = db.define('attendee', {
   first_name: {
     type: Sequelize.STRING,

@@ -18,7 +18,6 @@ const Talk = db.define('talk', {
 }, {
   freezeTableName: true,
 });
-
 Talk.belongsTo(Attendee, {
   foreignKey: 'speaker_id',
   targetKey: 'email',

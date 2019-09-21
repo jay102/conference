@@ -13,7 +13,6 @@ class AttendeesContainer extends Component {
   fetchAttendees = () => {
     axios.get('/api/attendee')
       .then(res => {
-        console.log(res.data)
         this.setState({ attendees: res.data.data })
       })
       .catch(err => {
@@ -21,6 +20,9 @@ class AttendeesContainer extends Component {
           console.log(err.response.data)
         }
       })
+  }
+  refresh = () => {
+    this.fetchAttendees()
   }
 
   render() {
@@ -40,7 +42,7 @@ class AttendeesContainer extends Component {
       );
     })
     return (
-      <AttendeeTable {...this.state} Table={Table} />
+      <AttendeeTable {...this.state} Table={Table} refresh={this.refresh} />
     );
   }
 }

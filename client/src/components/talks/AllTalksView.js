@@ -1,7 +1,6 @@
 import React from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import ResponseChecker from '../ResponseChecker/ResponseChecker'
 const SpeakView = (props) => {
   return (
     <>
@@ -15,6 +14,7 @@ const SpeakView = (props) => {
               <th scope="col">LAST NAME</th>
               <th scope="col">ROLE</th>
               <th scope="col">TOPIC</th>
+              <th scope="col">TIME</th>
               <th scope="col"></th>
             </tr>
           </thead>
