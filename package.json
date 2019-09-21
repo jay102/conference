@@ -1,0 +1,42 @@
+{
+  "name": "intellichub",
+  "version": "1.0.0",
+  "description": "Back-end for intellichub",
+  "main": "main.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000  --detectOpenHandles",
+    "start": "set DEBUG=main & node main.js",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
+    "dev": "set DEBUG=main & nodemon main.js",
+    "lint": "eslint .",
+    "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
+    "jest": {
+      "testEnvironment": "node",
+      "coveragePathIgnorePatterns": [
+        "/node_modules/"
+      ]
+    }
+  },
+  "author": "Ikwechegh James",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^6.4.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.2",
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chalk": "^2.4.2",
+    "cross-env": "^6.0.0",
+    "debug": "^4.1.1",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "morgan": "^1.9.1",
+    "pg": "^7.12.1",
+    "sequelize": "^5.19.0"
+  }
+}
