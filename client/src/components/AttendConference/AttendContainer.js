@@ -10,7 +10,8 @@ class AttendConferenceContainer extends Component {
     phone: "",
     role: "",
     error: false,
-    success: false
+    success: false,
+    errorMsg: ""
   }
   handleChange = (e) => {
     const { name } = e.target
@@ -41,7 +42,8 @@ class AttendConferenceContainer extends Component {
         if (err.response) {
           console.log(err.response)
           this.setState({
-            error: !this.state.error
+            error: !this.state.error,
+            errorMsg: err.response.data.error
           })
         }
       })

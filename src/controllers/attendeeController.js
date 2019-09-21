@@ -23,21 +23,33 @@ const addAttendeeController = (Attendee) => {
   };
 
   const addAttendee = (req, res) => {
-    Attendee.create({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      phone: req.body.phone,
-      email: req.body.email,
-      role: req.body.role,
-      arrival_time: moment().format('llll'),
+    Attendee.findOrCreate({
+      where: { email: req.body.email },
+      defaults: {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        phone: req.body.phone,
+        email: req.body.email,
+        role: req.body.role,
+        arrival_time: moment().format('llll'),
+      },
+
     })
-      .then((result) => {
-        success({
-          msg: 'attendee added',
-          data: result,
-          successCode: 201,
-          res,
-        });
+      .then(([result, created]) => {
+        if (created) {
+          success({
+            msg: 'attendee added',
+            data: result,
+            successCode: 201,
+            res,
+          });
+        } else {
+          error({
+            err: 'You cant register twice',
+            errCode: 422,
+            res,
+          });
+        }
       }).catch((err) => {
         error({
           err,
